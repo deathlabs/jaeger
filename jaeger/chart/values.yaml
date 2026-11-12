@@ -1,0 +1,22 @@
+---
+replicaCount: 1
+
+image:
+  repository: deathlabs/jaeger
+  tag: 2.23.0
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  uiPort: 16686
+  otlpGrpcPort: 4317
+  otlpHttpPort: 4318
+  healthPort: 13133
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 1
+    memory: 1Gi

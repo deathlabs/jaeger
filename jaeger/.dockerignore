@@ -1,0 +1,14 @@
+.git
+.github
+CHANGELOG.md
+README.md
+Makefile
+chart
+uds-package.yaml
+zarf.yaml
+vex.yaml
+vex.json
+*.json
+*.tar
+*.tar.zst
+!config.yaml

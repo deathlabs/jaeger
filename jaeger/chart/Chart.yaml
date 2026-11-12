@@ -1,0 +1,7 @@
+---
+apiVersion: v2
+type: application
+name: jaeger
+description: Jaeger for UDS Core
+version: 0.1.0
+appVersion: 2.23.0

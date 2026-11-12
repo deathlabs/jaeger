@@ -1,0 +1,10 @@
+---
+advisories:
+  - vulnerability: CVE-2025-60876
+    status: not_affected
+    justification: vulnerable_code_not_in_execute_path
+    impact_statement: CVE-2025-60876 affects request-target handling in the BusyBox wget applet. The image starts only /usr/local/bin/jaeger, and neither the entrypoint, configuration, nor Jaeger invokes BusyBox wget.
+    products:
+      - pkg:apk/alpine/busybox@1.37.0-r30
+      - pkg:apk/alpine/busybox-binsh@1.37.0-r30
+      - pkg:apk/alpine/ssl_client@1.37.0-r30

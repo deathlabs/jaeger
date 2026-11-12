@@ -1,0 +1,27 @@
+---
+kind: ZarfPackageConfig
+metadata:
+  name: jaeger
+  version: 0.1.0
+  annotations:
+    dev.uds.title: Jaeger
+
+components:
+  - name: jaeger
+    required: true
+    charts:
+      - name: jaeger
+        version: 0.1.0
+        namespace: jaeger
+        localPath: jaeger/chart
+        valuesFiles:
+          - jaeger/chart/values.yaml
+    images:
+      - deathlabs/jaeger:2.23.0
+  - name: uds
+    required: true
+    manifests:
+      - name: jaeger
+        namespace: jaeger
+        files:
+          - uds-package.yaml

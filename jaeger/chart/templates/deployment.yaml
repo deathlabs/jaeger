@@ -1,0 +1,66 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jaeger
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: jaeger
+    app.kubernetes.io/component: tracing
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: jaeger
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: jaeger
+        app.kubernetes.io/component: tracing
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+      containers:
+        - name: jaeger
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: JAEGER_LISTEN_HOST
+              value: 0.0.0.0
+          ports:
+            - name: ui
+              containerPort: {{ .Values.service.uiPort }}
+            - name: otlp-grpc
+              containerPort: {{ .Values.service.otlpGrpcPort }}
+            - name: otlp-http
+              containerPort: {{ .Values.service.otlpHttpPort }}
+            - name: health
+              containerPort: {{ .Values.service.healthPort }}
+          readinessProbe:
+            httpGet:
+              path: /status
+              port: health
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /status
+              port: health
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ALL]
+            readOnlyRootFilesystem: true
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}

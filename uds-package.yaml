@@ -1,0 +1,23 @@
+---
+apiVersion: uds.dev/v1alpha1
+kind: Package
+metadata:
+  name: jaeger
+  namespace: jaeger
+spec:
+  network:
+    allow:
+      - description: Allow OTLP traffic to Jaeger
+        direction: Ingress
+        remoteGenerated: Anywhere
+        selector:
+          app.kubernetes.io/name: jaeger
+        ports:
+          - 4317
+          - 4318
+    expose:
+      - service: jaeger
+        selector:
+          app.kubernetes.io/name: jaeger
+        host: jaeger
+        port: 16686
